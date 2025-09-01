@@ -1,20 +1,18 @@
 import React from "react";
-import { InteractiveHoverButton } from "../component/InteractiveHoverButton";
-import { VideoTextDemo } from "../component/VideoTextDemo";
+import { InteractiveHoverButton } from "../component/magicui/InteractiveHoverButton";
+import { MorphingText } from "../component/magicui/MorphingText"; // 1. Impor komponen MorphingText
 
 const LandingPage = () => {
   return (
-    <div className="flex flex-col items-center justify-center h-screen bg-gray-100 space-y-8">
-      {/* Video Text */}
-      <VideoTextDemo />
+    <div className="flex flex-col items-center justify-center h-screen bg-gray-50 space-y-8 p-4 text-center">
+      
+      {/* 2. Tambahkan komponen MorphingText di sini */}
+      <MorphingText
+        texts={["Welcome", "To The", "Seminar", "Registration", "System"]}
+        className="text-4xl md:text-6xl font-bold text-blue-600"
+      />
 
-      {/* Judul */}
-      <h1 className="text-4xl font-bold text-blue-600">
-        Welcome to the Seminar Registration System
-      </h1>
-
-      {/* Tombol Login */}
-      <InteractiveHoverButton>
+      <InteractiveHoverButton onClick={() => console.log("Login clicked!")}>
         Login
       </InteractiveHoverButton>
     </div>
