@@ -5,7 +5,7 @@ import { useCallback, useEffect, useRef } from "react";
 // Menghapus baris import { cn } dari sini karena file utils-nya tidak ada.
 
 const morphTime = 2.0;
-const cooldownTime = 0.3;
+const cooldownTime = 0.5;
 
 const useMorphingText = (texts) => {
   const textIndexRef = useRef(0);
@@ -133,11 +133,15 @@ export const MorphingText = ({
   className,
 }) => (
   <div
-    // Mengganti `cn(...)` dengan template string JavaScript biasa
+    // 1. Menghapus kelas [filter:...] dari sini
     className={[
-      "relative mx-auto h-16 w-full max-w-screen-md text-center font-sans text-[40pt] font-bold leading-none [filter:url(#threshold)_blur(0.6px)] md:h-24 lg:text-[6rem]",
+      "relative mx-auto h-16 w-full max-w-screen-md text-center font-sans text-[40pt] font-bold leading-none md:h-24 lg:text-[6rem]",
       className,
     ].join(" ")}
+    // 2. Menambahkan filter sebagai inline style di sini
+    style={{
+      filter: "url(#threshold) blur(0.1px)",
+    }}
   >
     <Texts texts={texts} />
     <SvgFilters />
