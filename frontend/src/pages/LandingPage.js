@@ -8,15 +8,28 @@ import { MorphingText } from "../component/magicui/MorphingText";
 
 const LandingPage = () => {
   // 2. Buat state untuk menyimpan nilai input
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   // 3. Buat fungsi untuk menangani submit form
-  const handleLogin = (e) => {
-    e.preventDefault(); // Mencegah refresh halaman saat form disubmit
-    console.log("Login attempt with:", { username, password });
-    // Di sini Anda bisa menambahkan logika untuk mengirim data ke API
-    alert(`Username: ${username}\nPassword: ${password}`);
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await fetch('http://localhost:5000/api/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password }),
+    });
+      const data = await response.json();
+      if (response.ok) {
+        // Simpan token, redirect, dll
+        alert('Login berhasil!');
+      } else {
+        alert(data.message || 'Login gagal');
+      }
+    } catch (error) {
+      alert('Terjadi kesalahan koneksi');
+    }
   };
 
   return (
@@ -40,15 +53,15 @@ const LandingPage = () => {
         <form onSubmit={handleLogin} className="space-y-4">
           <div>
             {/* 5. Hubungkan label ke input menggunakan htmlFor dan id */}
-            <label htmlFor="username" className="block text-sm font-medium text-gray-300 mb-2">
-              Username
+            <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-2">
+              Email
             </label>
             <input
-              id="username"
-              type="text"
-              placeholder="Enter your username"
-              value={username} // Hubungkan nilai input ke state
-              onChange={(e) => setUsername(e.target.value)} // Perbarui state saat diketik
+              id="email"
+              type="email"
+              placeholder="Enter your email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               className="w-full rounded-md border border-gray-600 bg-gray-800/70 p-3 text-white placeholder-gray-400 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
             />
           </div>
