@@ -13,7 +13,7 @@ exports.mark = async (req, res) => {
 
   if (status === 'hadir') {
     // Update status pendaftaran ke approved/lulus
-    await updateRegistrationStatus(registration_id, 'approved');
+  await updateRegistrationStatus(registration_id, 'approved');
     // Ambil data user dan seminar
     const [regRows] = await db.query(
       `SELECT u.nama AS user_name, s.judul AS seminar_title
@@ -33,7 +33,7 @@ exports.mark = async (req, res) => {
     res.json({ message: 'Absensi hadir, status lulus & sertifikat digenerate.' });
   } else if (status === 'tidak_hadir') {
     // Update status pendaftaran ke tidak_lulus
-    await updateRegistrationStatus(registration_id, 'tidak_lulus');
+  await updateRegistrationStatus(registration_id, 'rejected');
     res.json({ message: 'Absensi tidak hadir, status tidak lulus.' });
   } else {
     res.json({ message: 'Absensi berhasil dicatat.' });

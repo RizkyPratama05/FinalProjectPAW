@@ -22,7 +22,7 @@ exports.list = async (req, res) => {
 
 // Detail seminar
 exports.detail = async (req, res) => {
-    const seminar = await getSeminarById(req.params.id);
+    const seminar = await getSeminarById(req.params.seminar_id);
     if (!seminar) {
         return res.status(404).json({ message: 'Seminar not found' });
     }
@@ -32,12 +32,12 @@ exports.detail = async (req, res) => {
 // Update seminar
 exports.update = async (req, res) => {
     const { judul, deskripsi, tanggal, lokasi } = req.body;
-    await updateSeminar(req.params.id, judul, deskripsi, tanggal, lokasi);
+    await updateSeminar(req.params.seminar_id, judul, deskripsi, tanggal, lokasi);
     res.json({ message: 'Seminar updated successfully' });
 };
 
 // Hapus seminar
 exports.delete = async (req, res) => {
-    await deleteSeminar(req.params.id);
+    await deleteSeminar(req.params.seminar_id);
     res.json({ message: 'Seminar deleted successfully' });
 };

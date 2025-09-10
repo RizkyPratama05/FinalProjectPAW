@@ -2,8 +2,8 @@ const db = require('../database/db');
 
 const markAttendance = async (registration_id, status) => {
   await db.query(
-    'INSERT INTO attendance (registration_id, status) VALUES (?, ?) ON DUPLICATE KEY UPDATE status = ?',
-    [registration_id, status, status]
+    'INSERT INTO attendance (registration_id, status) VALUES (?, ?) ON DUPLICATE KEY UPDATE status = VALUES(status)',
+    [registration_id, status]
   );
 };
 

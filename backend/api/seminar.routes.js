@@ -6,7 +6,7 @@ const { isAdmin } = require('../middlewares/role.middleware');
 
 router.post('/', protect, isAdmin, seminarController.create);
 router.get('/', seminarController.list);
-router.get('/:id', seminarController.detail);
-router.put('/:id', protect, isAdmin, seminarController.update);
-router.delete('/:id', protect, isAdmin, seminarController.delete);
+router.get('/:seminar_id', seminarController.detail);
+router.put('/:seminar_id', protect, isAdmin, seminarController.update);
+router.delete('/:seminar_id', protect, isAdmin, seminarController.delete);
 module.exports = router;
