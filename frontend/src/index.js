@@ -1,11 +1,11 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import LandingPage from './pages/LandingPage'; // ⬅️ ganti import
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "./index.css";
+import Beranda from "./pages/Beranda";   // ⬅️ ganti import ke Beranda
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <LandingPage />   {/* ⬅️ render LandingPage, bukan App */}
+    <Beranda />   {/* ⬅️ render Beranda langsung */}
   </React.StrictMode>
 );
