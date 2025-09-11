@@ -1,3 +1,4 @@
+// Import fungsi seminar dari model
 const {
     createSeminar,
     getSeminars,
@@ -6,7 +7,7 @@ const {
     deleteSeminar
 } = require('../models/seminar.models');
 
-// Buat seminar
+// Endpoint untuk membuat seminar baru
 exports.create = async (req, res) => {
     const { judul, deskripsi, tanggal, lokasi } = req.body;
     const created_by = req.user.id; 
@@ -14,13 +15,13 @@ exports.create = async (req, res) => {
     res.status(201).json({ message: 'Seminar created successfully' });
 };
 
-// List semua seminar
+// Endpoint untuk list semua seminar
 exports.list = async (req, res) => {
     const seminars = await getSeminars();
     res.json(seminars);
 };
 
-// Detail seminar
+// Endpoint untuk detail seminar berdasarkan seminar_id
 exports.detail = async (req, res) => {
     const seminar = await getSeminarById(req.params.seminar_id);
     if (!seminar) {
@@ -29,14 +30,14 @@ exports.detail = async (req, res) => {
     res.json(seminar);
 };
 
-// Update seminar
+// Endpoint untuk update seminar
 exports.update = async (req, res) => {
     const { judul, deskripsi, tanggal, lokasi } = req.body;
     await updateSeminar(req.params.seminar_id, judul, deskripsi, tanggal, lokasi);
     res.json({ message: 'Seminar updated successfully' });
 };
 
-// Hapus seminar
+// Endpoint untuk menghapus seminar
 exports.delete = async (req, res) => {
     await deleteSeminar(req.params.seminar_id);
     res.json({ message: 'Seminar deleted successfully' });

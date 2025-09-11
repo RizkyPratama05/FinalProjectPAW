@@ -1,7 +1,9 @@
+// Import fungsi sertifikat dari model dan service
 const { createCertificate, getCertificateByRegistration } = require('../models/certificate.models');
 const { generateCertificatePDF } = require('../services/certificate.service');
 const db = require('../database/db');
 
+// Endpoint untuk generate sertifikat seminar
 exports.generate = async (req, res) => {
   const { registration_id } = req.params;
 
@@ -19,15 +21,16 @@ exports.generate = async (req, res) => {
   }
   const { user_name, seminar_title } = regRows[0];
 
-  // Generate PDF
+  // Generate sertifikat PDF
   const file_url = await generateCertificatePDF(registration_id, user_name, seminar_title);
 
-  // Simpan ke database
+  // Simpan sertifikat ke database
   await createCertificate(registration_id, file_url);
 
   res.json({ message: 'Sertifikat berhasil dibuat', file_url });
 };
 
+// Endpoint untuk detail sertifikat berdasarkan registration_id
 exports.detail = async (req, res) => {
   const { registration_id } = req.params;
   const certificate = await getCertificateByRegistration(registration_id);
