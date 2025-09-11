@@ -24,7 +24,7 @@ exports.validateRegistration = async (req, res) => {
     const { user_name, seminar_title } = regRows[0];
 
     // Generate sertifikat PDF
-    const file_url = await generateCertificatePDF(registration_id, user_name, seminar_title);
+    //const file_url = await generateCertificatePDF(registration_id, user_name, seminar_title);
 
     // Simpan sertifikat ke database
     await createCertificate(registration_id, file_url);
