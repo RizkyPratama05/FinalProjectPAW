@@ -1,59 +1,49 @@
-
 import React from "react";
-import {MagicCard} from "../component/magicui/magic-card"; // pastikan ada filenya
-import {ShinyButton} from "../component/magicui/shiny-button"; // contoh extra button
-import { motion } from "framer-motion";
+import SeminarCard from "../component/magicui/SeminarCard";
 
 export default function Beranda() {
+  const seminars = [
+    {
+      id: 1,
+      title: "Seminar Teknologi 2025",
+      desc: "Bahas perkembangan AI & IoT bersama pembicara internasional.",
+      date: "20 September 2025",
+      location: "UMY Convention Hall",
+      price: "Rp 100.000",
+      image:
+        "https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp",
+    },
+    {
+      id: 2,
+      title: "Seminar Startup & Inovasi",
+      desc: "Strategi membangun startup di era digital.",
+      date: "25 September 2025",
+      location: "Online (Zoom)",
+      price: "Rp 50.000",
+      image:
+        "https://img.daisyui.com/images/stock/photo-1505740420928-5e560c06d30e.webp",
+    },
+  ];
+
   return (
-    <div className="min-h-screen bg-neutral-950 text-neutral-50">
-      {/* Navbar */}
-      <header className="sticky top-0 z-40 border-b border-neutral-800/60 bg-neutral-950/70 backdrop-blur">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
-          <span className="text-lg font-bold text-fuchsia-400">MagicHub</span>
-          <ShinyButton>Masuk</ShinyButton>
-        </div>
-      </header>
+    <div className="min-h-screen bg-gray-50 py-12 px-6">
+      <h1 className="text-4xl font-extrabold text-center mb-12 text-gray-800">
+        🎟️ Daftar Seminar 2025
+      </h1>
 
-      {/* Hero Section */}
-      <section className="mx-auto grid max-w-6xl grid-cols-1 items-center gap-10 px-4 py-16 md:grid-cols-2">
-        <div>
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-4xl font-extrabold leading-tight text-white md:text-5xl"
-          >
-            Platform Tiket Futuristik
-          </motion.h1>
-          <p className="mt-3 max-w-prose text-neutral-400">
-            Beli tiket konser, festival, hingga workshop. Semua ada di MagicHub ✨
-          </p>
-
-          <div className="mt-6 flex gap-4">
-            <ShinyButton>Beli Tiket</ShinyButton>
-            <ShinyButton className="bg-fuchsia-600 text-white hover:bg-fuchsia-500">
-              Jadi Partner
-            </ShinyButton>
-          </div>
-        </div>
-
-        {/* Hero Card pakai Magic UI */}
-        <MagicCard
-          className="w-full max-w-md p-6 bg-neutral-900 border-neutral-800"
-          gradientSize={300}
-          gradientFrom="#7C3AED"
-          gradientTo="#D946EF"
-          gradientColor="rgba(255, 255, 255, 0.05)"
-        >
-          <div className="text-center">
-            <h2 className="text-xl font-semibold text-white mb-2">Event Terdekat</h2>
-            <p className="text-neutral-400">Arcofest 2025 — Jakarta</p>
-            <p className="text-neutral-400 mt-1">22 November 2025</p>
-            <ShinyButton className="mt-4 w-full">Pesan Sekarang</ShinyButton>
-          </div>
-        </MagicCard>
-      </section>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 justify-items-center">
+        {seminars.map((item) => (
+          <SeminarCard
+            key={item.id}
+            title={item.title}
+            desc={item.desc}
+            date={item.date}
+            location={item.location}
+            price={item.price}
+            image={item.image}
+          />
+        ))}
+      </div>
     </div>
   );
 }
