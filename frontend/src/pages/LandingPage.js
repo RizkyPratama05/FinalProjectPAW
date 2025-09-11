@@ -2,6 +2,7 @@
 
 // 1. Impor useState untuk mengelola state form
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {MagicCard} from "../component/magicui/MagicCard";
 import { InteractiveHoverButton } from "../component/magicui/InteractiveHoverButton";
 import { MorphingText } from "../component/magicui/MorphingText";
@@ -10,6 +11,7 @@ const LandingPage = () => {
   // 2. Buat state untuk menyimpan nilai input
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
   // 3. Buat fungsi untuk menangani submit form
   const handleLogin = async (e) => {
@@ -24,6 +26,7 @@ const LandingPage = () => {
       if (response.ok) {
         // Simpan token, redirect, dll
         alert('Login berhasil!');
+        navigate('/beranda');
       } else {
         alert(data.message || 'Login gagal');
       }
