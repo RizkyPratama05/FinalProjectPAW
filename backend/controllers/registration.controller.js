@@ -1,15 +1,18 @@
+// Import fungsi pendaftaran dan sertifikat dari model dan service
 const { updateRegistrationStatus } = require('../models/registration.models');
 const { createCertificate } = require('../models/certificate.models');
 const { generateCertificatePDF } = require('../services/certificate.service');
 const db = require('../database/db');
 
+// Endpoint untuk validasi pendaftaran seminar (admin)
 exports.validateRegistration = async (req, res) => {
   const { registration_id } = req.params;
   const { status } = req.body;
+  // Update status pendaftaran di database
   await updateRegistrationStatus(registration_id, status);
 
   if (status === 'approved') {
-    // Ambil data user dan seminar
+    // Jika disetujui, ambil data user dan seminar
     const [regRows] = await db.query(
       `SELECT u.nama AS user_name, s.judul AS seminar_title
        FROM registrations r
@@ -20,10 +23,10 @@ exports.validateRegistration = async (req, res) => {
     );
     const { user_name, seminar_title } = regRows[0];
 
-    // Generate PDF
-    const file_url = await generateCertificatePDF(registration_id, user_name, seminar_title);
+    // Generate sertifikat PDF
+    //const file_url = await generateCertificatePDF(registration_id, user_name, seminar_title);
 
-    // Simpan ke database
+    // Simpan sertifikat ke database
     await createCertificate(registration_id, file_url);
   }
 
@@ -31,15 +34,16 @@ exports.validateRegistration = async (req, res) => {
 };
 
 // Pendaftaran seminar oleh user
+// Endpoint untuk pendaftaran seminar oleh user
 exports.registerSeminar = async (req, res) => {
-  console.log('req.user:', req.user);
+  // Ambil user_id dari token
   const user_id = req.user && req.user.id ? req.user.id : null;
   if (!user_id) {
     return res.status(401).json({ message: 'User tidak terotorisasi atau token tidak valid.' });
   }
   const { seminar_id, data_tambahan } = req.body;
 
-  // Cek apakah sudah pernah daftar
+  // Cek apakah user sudah pernah daftar seminar ini
   const [existing] = await db.query(
     'SELECT * FROM registrations WHERE user_id = ? AND seminar_id = ?',
     [user_id, seminar_id]
@@ -48,6 +52,7 @@ exports.registerSeminar = async (req, res) => {
     return res.status(400).json({ message: 'Sudah terdaftar di seminar ini' });
   }
 
+  // Simpan pendaftaran ke database
   await db.query(
     'INSERT INTO registrations (user_id, seminar_id, data_tambahan) VALUES (?, ?, ?)',
     [user_id, seminar_id, data_tambahan]
@@ -56,6 +61,7 @@ exports.registerSeminar = async (req, res) => {
 };
 
 // List semua pendaftaran (admin)
+// Endpoint untuk list semua pendaftaran seminar (admin)
 exports.listRegistrations = async (req, res) => {
   const [rows] = await db.query(
     `SELECT r.*, u.nama, u.email, s.judul 
