@@ -1,17 +1,32 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
-const SeminarCard = ({ title, desc, date, location, price, image }) => {
+const SeminarCard = ({ id, title, desc, date, location, price, image }) => {
   return (
-    <div className="bg-white text-black rounded-lg p-4 shadow w-80">
-      <img src={image} alt={title} className="rounded mb-2" />
-      <h2 className="font-bold text-lg">{title}</h2>
-      <p>{desc}</p>
-      <div className="text-sm mt-2">
-        <div>{date}</div>
-        <div>{location}</div>
-        <div>{price}</div>
+    <Link
+      to={`/seminar/${id}`}
+      className="bg-gray-900 shadow-lg rounded-xl overflow-hidden w-full max-w-sm border border-gray-700 hover:shadow-xl hover:shadow-blue-500/30 transition"
+    >
+      <img
+        src={image}
+        alt={title}
+        className="h-40 w-full object-cover opacity-90 hover:opacity-100 transition"
+      />
+      <div className="p-5 text-gray-200">
+        <h2 className="text-lg font-bold mb-2 text-white">{title}</h2>
+        <p className="text-sm text-gray-400 mb-3">{desc}</p>
+
+        <p className="text-sm">
+          <span className="font-semibold text-gray-300">Tanggal:</span> {date}
+        </p>
+        <p className="text-sm">
+          <span className="font-semibold text-gray-300">Lokasi:</span> {location}
+        </p>
+        <p className="text-sm">
+          <span className="font-semibold text-gray-300">Harga:</span> {price}
+        </p>
       </div>
-    </div>
+    </Link>
   );
 };
 
