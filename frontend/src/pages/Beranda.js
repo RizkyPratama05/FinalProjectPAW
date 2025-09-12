@@ -16,16 +16,14 @@ export default function Beranda() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-black via-gray-900 to-purple-950 pt-24 px-6">
-      <h1 className="flex items-center justify-center gap-3 text-4xl md:text-5xl font-extrabold text-center mb-12 bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent drop-shadow-md py-2">
-        <span className="text-5xl md:text-6xl animate-bounce">🎟️</span>
-        <span>Daftar Seminar 2025</span>
-      </h1>
-
+    <div className="min-h-screen w-full bg-gradient-to-b from-black via-gray-900 to-purple-950 pt-24 px-20">
+      
+      {/* Daftar Seminar */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 justify-items-center">
         {seminars.map((item) => (
           <SeminarCard
             key={item.id}
+            id={item.id}   // <-- wajib
             title={item.title}
             desc={item.desc}
             date={item.date}
