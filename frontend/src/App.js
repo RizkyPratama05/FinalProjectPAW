@@ -4,6 +4,7 @@ import LandingPage from "./pages/LandingPage";
 import Beranda from "./pages/Beranda";
 import CertificatePage from "./pages/CertificatePage";
 import SeminarDetail from "./pages/SeminarDetail";
+import KelolaSeminar from "./admin/KelolaSeminar"; // <-- import ditambahkan
 import Layout from "./component/Layout";
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
           <Route path="/beranda" element={<Beranda />} />
           <Route path="/certificate" element={<CertificatePage />} />
           <Route path="/seminar/:id" element={<SeminarDetail />} />
+          <Route path="/kelola-seminar" element={<KelolaSeminar />} />  {/* <-- route baru */}
         </Route>
       </Routes>
     </Router>

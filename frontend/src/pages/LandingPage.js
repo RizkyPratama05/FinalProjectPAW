@@ -1,37 +1,47 @@
 "use client";
 
-// 1. Impor useState untuk mengelola state form
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {MagicCard} from "../component/magicui/MagicCard";
+import { MagicCard } from "../component/magicui/MagicCard";
 import { InteractiveHoverButton } from "../component/magicui/InteractiveHoverButton";
 import { MorphingText } from "../component/magicui/MorphingText";
 
 const LandingPage = () => {
-  // 2. Buat state untuk menyimpan nilai input
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false); // Tambah state loading
   const navigate = useNavigate();
 
-  // 3. Buat fungsi untuk menangani submit form
   const handleLogin = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
-      const response = await fetch('http://localhost:5000/api/auth/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password }),
-    });
+      const response = await fetch("http://localhost:5000/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+
       const data = await response.json();
+
       if (response.ok) {
-        // Simpan token, redirect, dll
-        alert('Login berhasil!');
-        navigate('/beranda');
+        // Simpan token dan info user di localStorage
+        localStorage.setItem("token", data.token);
+        localStorage.setItem(
+          "user",
+          JSON.stringify({ nama: data.nama, role: data.role })
+        );
+
+        alert("Login berhasil!");
+        navigate("/beranda");
       } else {
-        alert(data.message || 'Login gagal');
+        alert(data.message || "Login gagal");
       }
     } catch (error) {
-      alert('Terjadi kesalahan koneksi');
+      console.error("Login error:", error);
+      alert("Terjadi kesalahan koneksi");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -52,22 +62,22 @@ const LandingPage = () => {
       >
         <h2 className="text-2xl font-bold text-white mb-6 text-center">Login</h2>
 
-        {/* 4. Tambahkan onSubmit ke form */}
         <form onSubmit={handleLogin} className="space-y-4">
           <div>
-            {/* 5. Hubungkan label ke input menggunakan htmlFor dan id */}
             <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-2">
               Email
             </label>
             <input
               id="email"
               type="email"
-              placeholder="Enter your email"
+              placeholder="Masukkan email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="w-full rounded-md border border-gray-600 bg-gray-800/70 p-3 text-white placeholder-gray-400 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+              required
             />
           </div>
+
           <div>
             <label htmlFor="password" className="block text-sm font-medium text-gray-300 mb-2">
               Password
@@ -75,17 +85,21 @@ const LandingPage = () => {
             <input
               id="password"
               type="password"
-              placeholder="Enter your password"
-              value={password} // Hubungkan nilai input ke state
-              onChange={(e) => setPassword(e.target.value)} // Perbarui state saat diketik
+              placeholder="Masukkan password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               className="w-full rounded-md border border-gray-600 bg-gray-800/70 p-3 text-white placeholder-gray-400 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+              required
             />
           </div>
 
           <div className="flex justify-center pt-2">
-            {/* Tombol ini sekarang akan memicu onSubmit form saat diklik */}
-            <InteractiveHoverButton type="submit" className="px-6 py-2 rounded-full bg-gray-800/70 border border-gray-700 text-white hover:bg-gray-700/90">
-              Login
+            <InteractiveHoverButton
+              type="submit"
+              className="px-6 py-2 rounded-full bg-gray-800/70 border border-gray-700 text-white hover:bg-gray-700/90"
+              disabled={loading} // Disable saat loading
+            >
+              {loading ? "Loading..." : "Login"}
             </InteractiveHoverButton>
           </div>
         </form>
