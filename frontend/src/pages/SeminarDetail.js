@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import {
   HiCalendar,
   HiClock,
@@ -12,6 +12,7 @@ export default function SeminarDetail() {
   const { id } = useParams();
   const [showModal, setShowModal] = useState(false);
   const [nama, setNama] = useState("");
+  const navigate = useNavigate();
 
   // Contoh data (nantinya ambil dari API)
   const seminars = [
@@ -49,11 +50,21 @@ export default function SeminarDetail() {
     );
   }
 
+  // Fungsi submit untuk menyimpan nama di localStorage
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    // Ambil data lama dari localStorage
+    const registrations = JSON.parse(localStorage.getItem("registrations")) || [];
+    registrations.push({ nama, seminar: seminar.title });
+    localStorage.setItem("registrations", JSON.stringify(registrations));
+
     alert(`Pendaftaran berhasil!\nNama: ${nama}\nSeminar: ${seminar.title}`);
     setShowModal(false);
     setNama("");
+
+    // Navigasi ke halaman sertifikat
+    navigate("/certificate");
   };
 
   return (

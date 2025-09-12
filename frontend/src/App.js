@@ -4,19 +4,22 @@ import LandingPage from "./pages/LandingPage";
 import Beranda from "./pages/Beranda";
 import CertificatePage from "./pages/CertificatePage";
 import SeminarDetail from "./pages/SeminarDetail";
-import Layout from "./component/Layout"; // tambahkan ini
+import Layout from "./component/Layout";
 
 function App() {
   return (
     <Router>
-      <Layout>
-        <Routes>
-          <Route path="/" element={<LandingPage />} />
+      <Routes>
+        {/* Landing page tanpa Navbar */}
+        <Route path="/" element={<LandingPage />} />
+
+        {/* Halaman lain dengan Layout (Navbar, Footer, dll) */}
+        <Route element={<Layout />}>
           <Route path="/beranda" element={<Beranda />} />
           <Route path="/certificate" element={<CertificatePage />} />
           <Route path="/seminar/:id" element={<SeminarDetail />} />
-        </Routes>
-      </Layout>
+        </Route>
+      </Routes>
     </Router>
   );
 }

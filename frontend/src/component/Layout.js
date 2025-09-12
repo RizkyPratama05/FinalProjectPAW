@@ -1,11 +1,12 @@
 import React from "react";
+import { Outlet } from "react-router-dom";
 import Navbar from "./Navbar";
 
-export default function Layout({ children }) {
+export default function Layout() {
   return (
-    <div>
+    <>
       <Navbar />
-      <main className="pt-20">{children}</main> {/* kasih padding biar ga ketutup navbar */}
-    </div>
+      <Outlet />
+    </>
   );
 }
