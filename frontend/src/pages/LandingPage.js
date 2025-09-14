@@ -33,7 +33,11 @@ const LandingPage = () => {
         );
 
         alert("Login berhasil!");
-        navigate("/beranda");
+        if (data.role === "admin") {
+          navigate("/kelola-seminar");
+        } else {
+          navigate("/beranda");
+        }
       } else {
         alert(data.message || "Login gagal");
       }
