@@ -1,10 +1,10 @@
 const db = require('../database/db');
 
 // Membuat seminar baru
-const createSeminar = async (judul, deskripsi, tanggal, lokasi, created_by) => {
+const createSeminar = async (judul, deskripsi, tanggal, lokasi, harga, gambar, created_by) => {
     await db.query(
-        'INSERT INTO seminars (judul, deskripsi, tanggal, lokasi, created_by) VALUES (?, ?, ?, ?, ?)',
-        [judul, deskripsi, tanggal, lokasi, created_by]
+        'INSERT INTO seminars (judul, deskripsi, tanggal, lokasi, harga, gambar, created_by) VALUES (?, ?, ?, ?, ?, ?, ?)',
+        [judul, deskripsi, tanggal, lokasi, harga, gambar, created_by]
     );
 };
 
@@ -21,10 +21,10 @@ const getSeminarById = async (id) => {
 };
 
 // Mengupdate seminar
-const updateSeminar = async (id, judul, deskripsi, tanggal, lokasi) => {
+const updateSeminar = async (id, judul, deskripsi, tanggal, lokasi, harga, gambar) => {
     await db.query(
-        'UPDATE seminars SET judul = ?, deskripsi = ?, tanggal = ?, lokasi = ? WHERE seminar_id = ?',
-        [judul, deskripsi, tanggal, lokasi, id]
+        'UPDATE seminars SET judul = ?, deskripsi = ?, tanggal = ?, lokasi = ?, harga = ?, gambar = ? WHERE seminar_id = ?',
+        [judul, deskripsi, tanggal, lokasi, harga, gambar, id]
     );
 };
 

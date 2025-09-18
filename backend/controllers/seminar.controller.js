@@ -9,9 +9,9 @@ const {
 
 // Endpoint untuk membuat seminar baru
 exports.create = async (req, res) => {
-    const { judul, deskripsi, tanggal, lokasi } = req.body;
+    const { judul, deskripsi, tanggal, lokasi, harga, gambar } = req.body;
     const created_by = req.user.id; 
-    await createSeminar(judul, deskripsi, tanggal, lokasi, created_by);
+    await createSeminar(judul, deskripsi, tanggal, lokasi, harga, gambar, created_by);
     res.status(201).json({ message: 'Seminar created successfully' });
 };
 
@@ -32,8 +32,8 @@ exports.detail = async (req, res) => {
 
 // Endpoint untuk update seminar
 exports.update = async (req, res) => {
-    const { judul, deskripsi, tanggal, lokasi } = req.body;
-    await updateSeminar(req.params.seminar_id, judul, deskripsi, tanggal, lokasi);
+    const { judul, deskripsi, tanggal, lokasi, harga, gambar } = req.body;
+    await updateSeminar(req.params.seminar_id, judul, deskripsi, tanggal, lokasi, harga, gambar);
     res.json({ message: 'Seminar updated successfully' });
 };
 

@@ -11,6 +11,8 @@ export default function KelolaSeminar() {
     deskripsi: "",
     tanggal: "",
     lokasi: "",
+    harga: "",
+    gambar: "",
     created_by: "", // opsional, bisa diisi user_id admin
   });
 
@@ -45,7 +47,7 @@ export default function KelolaSeminar() {
         .then(() => {
           fetchSeminars();
           setIsModalOpen(false);
-          setForm({ seminar_id: null, judul: "", deskripsi: "", tanggal: "", lokasi: "", created_by: "" });
+          setForm({ seminar_id: null, judul: "", deskripsi: "", tanggal: "", lokasi: "", harga: "", gambar: "", created_by: "" });
         });
     } else {
       // tambah
@@ -55,7 +57,7 @@ export default function KelolaSeminar() {
         .then(() => {
           fetchSeminars();
           setIsModalOpen(false);
-          setForm({ seminar_id: null, judul: "", deskripsi: "", tanggal: "", lokasi: "", created_by: "" });
+          setForm({ seminar_id: null, judul: "", deskripsi: "", tanggal: "", lokasi: "", harga: "", gambar: "", created_by: "" });
         });
     }
   };
@@ -67,6 +69,8 @@ export default function KelolaSeminar() {
       deskripsi: s.deskripsi,
       tanggal: s.tanggal,
       lokasi: s.lokasi,
+      harga: s.harga || "",
+      gambar: s.gambar || "",
       created_by: s.created_by || "",
     });
     setIsModalOpen(true);
@@ -97,6 +101,8 @@ export default function KelolaSeminar() {
               <textarea name="deskripsi" value={form.deskripsi} onChange={handleChange} placeholder="Deskripsi Seminar" className="w-full px-3 py-2 rounded bg-gray-800" />
               <input name="tanggal" value={form.tanggal} onChange={handleChange} placeholder="Tanggal" className="w-full px-3 py-2 rounded bg-gray-800" required />
               <input name="lokasi" value={form.lokasi} onChange={handleChange} placeholder="Lokasi" className="w-full px-3 py-2 rounded bg-gray-800" required />
+              <input name="harga" value={form.harga} onChange={handleChange} placeholder="Harga" className="w-full px-3 py-2 rounded bg-gray-800" />
+              <input name="gambar" value={form.gambar} onChange={handleChange} placeholder="URL Gambar" className="w-full px-3 py-2 rounded bg-gray-800" />
               {/* <input name="created_by" value={form.created_by} onChange={handleChange} placeholder="User ID Admin" className="w-full px-3 py-2 rounded bg-gray-800" /> */}
               <div className="flex justify-end gap-3 pt-4">
                 <button type="button" onClick={() => setIsModalOpen(false)} className="px-4 py-2 rounded-lg bg-gray-600">Batal</button>
@@ -115,6 +121,8 @@ export default function KelolaSeminar() {
               <th className="px-4 py-2">Deskripsi</th>
               <th className="px-4 py-2">Tanggal</th>
               <th className="px-4 py-2">Lokasi</th>
+              <th className="px-4 py-2">Harga</th>
+              <th className="px-4 py-2">Gambar</th>
               <th className="px-4 py-2">Aksi</th>
             </tr>
           </thead>
@@ -125,6 +133,8 @@ export default function KelolaSeminar() {
                 <td className="px-4 py-2">{s.deskripsi}</td>
                 <td className="px-4 py-2">{s.tanggal}</td>
                 <td className="px-4 py-2">{s.lokasi}</td>
+                <td className="px-4 py-2">{s.harga}</td>
+                <td className="px-4 py-2">{s.gambar ? <img src={s.gambar} alt="Gambar Seminar" className="h-12 w-12 object-cover rounded" /> : '-'}</td>
                 <td className="px-4 py-2 space-x-2">
                   <button onClick={() => handleEdit(s)} className="px-3 py-1 rounded bg-yellow-500">Edit</button>
                   <button onClick={() => handleDelete(s.seminar_id)} className="px-3 py-1 rounded bg-red-500">Hapus</button>
