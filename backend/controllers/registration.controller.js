@@ -5,7 +5,7 @@ exports.listMyRegistrations = async (req, res) => {
     return res.status(401).json({ message: 'User tidak terotorisasi atau token tidak valid.' });
   }
   const [rows] = await db.query(
-    `SELECT r.*, u.nama, s.judul, s.gambar, c.file_url AS sertifikat_url
+    `SELECT r.registration_id, r.status, s.judul, s.gambar, u.nama, c.file_url AS sertifikat_url
      FROM registrations r
      JOIN users u ON r.user_id = u.user_id
      JOIN seminars s ON r.seminar_id = s.seminar_id
@@ -58,7 +58,7 @@ exports.registerSeminar = async (req, res) => {
   if (!user_id) {
     return res.status(401).json({ message: 'User tidak terotorisasi atau token tidak valid.' });
   }
-  const { seminar_id, data_tambahan } = req.body;
+  const { seminar_id } = req.body;
 
   // Cek apakah user sudah pernah daftar seminar ini
   const [existing] = await db.query(
@@ -71,8 +71,8 @@ exports.registerSeminar = async (req, res) => {
 
   // Simpan pendaftaran ke database
   await db.query(
-    'INSERT INTO registrations (user_id, seminar_id, data_tambahan) VALUES (?, ?, ?)',
-    [user_id, seminar_id, data_tambahan]
+    'INSERT INTO registrations (user_id, seminar_id) VALUES (?, ?)',
+    [user_id, seminar_id]
   );
   res.status(201).json({ message: 'Pendaftaran seminar berhasil' });
 };

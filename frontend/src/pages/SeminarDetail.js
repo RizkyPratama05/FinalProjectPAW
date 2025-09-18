@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import {
   HiCalendar,
@@ -56,21 +57,22 @@ export default function SeminarDetail() {
     );
   }
 
-  // Fungsi submit untuk menyimpan nama di localStorage
-  const handleSubmit = (e) => {
+  // Fungsi submit untuk mendaftar seminar ke backend
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // Ambil data lama dari localStorage
-    const registrations = JSON.parse(localStorage.getItem("registrations")) || [];
-  registrations.push({ nama, seminar: seminar.judul });
-  localStorage.setItem("registrations", JSON.stringify(registrations));
-
-  alert(`Pendaftaran berhasil!\nNama: ${nama}\nSeminar: ${seminar.judul}`);
-  setShowModal(false);
-  setNama("");
-
-  // Navigasi ke halaman sertifikat
-  navigate("/certificate");
+    try {
+      await axios.post(
+        "http://localhost:5000/api/registration/seminar",
+        { seminar_id: seminar.seminar_id },
+        { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
+      );
+      alert(`Pendaftaran berhasil!\nNama: ${nama}\nSeminar: ${seminar.judul}`);
+      setShowModal(false);
+      setNama("");
+      navigate("/certificate");
+    } catch (err) {
+      alert("Pendaftaran gagal: " + (err.response?.data?.message || "Server error"));
+    }
   };
 
   return (
