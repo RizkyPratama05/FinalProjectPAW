@@ -7,13 +7,12 @@ const KelolaUser = () => {
   // Ambil data user
   const fetchUsers = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/user");
-      setUsers(res.data);
-    } catch (err) {
-      console.error("Fetch users error:", err);
-    }
+       axios.get("http://localhost:5000/api/user", {
+        headers: { Authorization: `Bearer ${token}` }
+      })
+      .then(res => setUsers(res.data))
+      .catch(err => console.error(err));
   };
-
 
     try {
       const res = await axios.get(API_URL);
@@ -93,6 +92,4 @@ const KelolaUser = () => {
   );
 
 export default KelolaUser;
-
-
 
