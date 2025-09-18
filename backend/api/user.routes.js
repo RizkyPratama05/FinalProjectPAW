@@ -40,10 +40,10 @@ router.get("/", async (req, res) => {
   }
 });
 
-// GET user by id
-router.get("/:id", async (req, res) => {
+// GET user by user_id
+router.get("/:user_id", async (req, res) => {
   try {
-    const [rows] = await db.query("SELECT * FROM users WHERE id = ?", [req.params.id]);
+    const [rows] = await db.query("SELECT * FROM users WHERE user_id = ?", [req.params.user_id]);
     res.json(rows[0]);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -67,12 +67,12 @@ router.post("/", async (req, res) => {
 });
 
 // UPDATE user
-router.put("/:id", async (req, res) => {
-  const { name, email } = req.body;
+router.put("/:user_id", async (req, res) => {
+  const { nama, email } = req.body;
   try {
     await db.query(
-      "UPDATE users SET name = ?, email = ? WHERE id = ?",
-      [name, email, req.params.id]
+      "UPDATE users SET nama = ?, email = ? WHERE user_id = ?",
+      [nama, email, req.params.user_id]
     );
     res.json({ message: "User updated" });
   } catch (err) {
@@ -81,9 +81,9 @@ router.put("/:id", async (req, res) => {
 });
 
 // DELETE user
-router.delete("/:id", async (req, res) => {
+router.delete("/:user_id", async (req, res) => {
   try {
-    await db.query("DELETE FROM users WHERE id = ?", [req.params.id]);
+    await db.query("DELETE FROM users WHERE user_id = ?", [req.params.user_id]);
     res.json({ message: "User deleted" });
   } catch (err) {
     res.status(500).json({ error: err.message });
