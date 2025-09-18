@@ -28,9 +28,10 @@ function App() {
 
         {/* Routes admin */}
         <Route element={<AdminLayout />}>
-          <Route path="/kelola-seminar" element={<KelolaSeminar />} />
-          <Route path="/users" element={<KelolaUser />} />
-          <Route path="/attendance" element={<Attendance />} />
+          <Route path="/admin" element={<KelolaSeminar />} /> {/* atau komponen dashboard admin */}
+          <Route path="/admin/seminar" element={<KelolaSeminar />} />
+          <Route path="/admin/users" element={<KelolaUser />} />
+          <Route path="/admin/attendance" element={<Attendance />} />
         </Route>
       </Routes>
     </Router>

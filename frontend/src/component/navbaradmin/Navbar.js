@@ -27,8 +27,6 @@ export default function NavbarAdmin() {
     navigate("/");
   };
 
-  // Sembunyikan navbar admin jika bukan di path /admin
-  if (!location.pathname.startsWith("/admin")) return null;
 
   return (
     <nav className="fixed top-0 left-0 w-full bg-gradient-to-r from-gray-900 to-black shadow-lg z-50">
@@ -56,8 +54,8 @@ export default function NavbarAdmin() {
             </Link>
           </li>
           <li>
-            <Link to="/admin/validasi" className="relative group">
-              Validasi Register
+            <Link to="/admin/attendance" className="relative group">
+              Validasi Kehadiran
               <span className="absolute left-0 -bottom-1 w-0 h-0.5 bg-purple-400 transition-all group-hover:w-full"></span>
             </Link>
           </li>
