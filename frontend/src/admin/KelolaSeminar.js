@@ -112,7 +112,7 @@ export default function KelolaSeminar() {
             <form onSubmit={handleSubmit} className="space-y-4">
               <input name="judul" value={form.judul} onChange={handleChange} placeholder="Judul Seminar" className="w-full px-3 py-2 rounded bg-gray-800" required />
               <textarea name="deskripsi" value={form.deskripsi} onChange={handleChange} placeholder="Deskripsi Seminar" className="w-full px-3 py-2 rounded bg-gray-800" />
-              <input name="tanggal" value={form.tanggal} onChange={handleChange} placeholder="Tanggal" className="w-full px-3 py-2 rounded bg-gray-800" required />
+              <input name="tanggal" type="date" value={form.tanggal} onChange={handleChange} placeholder="Tanggal" className="w-full px-3 py-2 rounded bg-gray-800" required />
               <input name="lokasi" value={form.lokasi} onChange={handleChange} placeholder="Lokasi" className="w-full px-3 py-2 rounded bg-gray-800" required />
               <input name="harga" value={form.harga} onChange={handleChange} placeholder="Harga" className="w-full px-3 py-2 rounded bg-gray-800" />
               <input name="gambar" type="file" accept="image/*" onChange={handleChange} className="w-full px-3 py-2 rounded bg-gray-800" />
