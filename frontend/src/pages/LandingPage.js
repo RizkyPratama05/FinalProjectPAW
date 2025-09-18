@@ -34,7 +34,7 @@ const LandingPage = () => {
 
         alert("Login berhasil!");
         if (data.role === "admin") {
-          navigate("/kelola-seminar");
+          navigate("/admin/seminar");
         } else {
           navigate("/beranda");
         }

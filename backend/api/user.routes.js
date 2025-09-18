@@ -27,10 +27,10 @@ router.post("/", async (req, res) => {
   const { name, email, password } = req.body;
   try {
     const [result] = await db.query(
-      "INSERT INTO users (name, email, password) VALUES (?, ?, ?)",
+      "INSERT INTO users (nama, email, password) VALUES (?, ?, ?)",
       [name, email, password]
     );
-    res.json({ id: result.insertId, name, email });
+    res.json({ id: result.insertId, nama: name, email });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
