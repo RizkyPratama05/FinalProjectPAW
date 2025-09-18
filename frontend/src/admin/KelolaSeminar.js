@@ -147,7 +147,7 @@ export default function KelolaSeminar() {
                 <td className="px-4 py-2">{s.tanggal}</td>
                 <td className="px-4 py-2">{s.lokasi}</td>
                 <td className="px-4 py-2">{s.harga}</td>
-                <td className="px-4 py-2">{s.gambar ? <img src={s.gambar} alt="Gambar Seminar" className="h-12 w-12 object-cover rounded" /> : '-'}</td>
+                <td className="px-4 py-2">{s.gambar ? <img src={s.gambar.startsWith('http') ? s.gambar : `http://localhost:5000${s.gambar}`} alt="Gambar Seminar" className="h-12 w-12 object-cover rounded" /> : '-'}</td>
                 <td className="px-4 py-2 space-x-2">
                   <button onClick={() => handleEdit(s)} className="px-3 py-1 rounded bg-yellow-500">Edit</button>
                   <button onClick={() => handleDelete(s.seminar_id)} className="px-3 py-1 rounded bg-red-500">Hapus</button>

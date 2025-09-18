@@ -80,7 +80,7 @@ export default function SeminarDetail() {
         {/* Poster */}
         <div className="lg:col-span-2">
           <img
-            src={seminar.gambar}
+            src={seminar.gambar ? (seminar.gambar.startsWith('http') ? seminar.gambar : `http://localhost:5000${seminar.gambar}`) : ''}
             alt={seminar.judul}
             className="w-full h-80 md:h-[450px] object-cover rounded-2xl shadow-xl"
           />
