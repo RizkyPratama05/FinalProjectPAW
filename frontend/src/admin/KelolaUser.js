@@ -1,13 +1,20 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-const API_URL = "http://localhost:5000/api/user"; // ✅ sesuai backend
-
 const KelolaUser = () => {
   const [users, setUsers] = useState([]);
 
   // Ambil data user
   const fetchUsers = async () => {
+    try {
+      const res = await axios.get("http://localhost:5000/api/user");
+      setUsers(res.data);
+    } catch (err) {
+      console.error("Fetch users error:", err);
+    }
+  };
+
+
     try {
       const res = await axios.get(API_URL);
       setUsers(res.data);
@@ -84,7 +91,6 @@ const KelolaUser = () => {
       </div>
     </div>
   );
-};
 
 export default KelolaUser;
 
