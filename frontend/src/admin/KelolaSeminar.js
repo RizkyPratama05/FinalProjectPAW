@@ -34,15 +34,28 @@ export default function KelolaSeminar() {
   }, []);
 
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    if (e.target.name === "gambar") {
+      setForm({ ...form, gambar: e.target.files[0] });
+    } else {
+      setForm({ ...form, [e.target.name]: e.target.value });
+    }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const formData = new FormData();
+    formData.append("judul", form.judul);
+    formData.append("deskripsi", form.deskripsi);
+    formData.append("tanggal", form.tanggal);
+    formData.append("lokasi", form.lokasi);
+    formData.append("harga", form.harga);
+    if (form.gambar) formData.append("gambar", form.gambar);
+    formData.append("created_by", form.created_by);
+
     if (form.seminar_id) {
       // update
-      axios.put(`http://localhost:5000/api/seminar/${form.seminar_id}`, form, {
-        headers: { Authorization: `Bearer ${token}` }
+      axios.put(`http://localhost:5000/api/seminar/${form.seminar_id}`, formData, {
+        headers: { Authorization: `Bearer ${token}`, "Content-Type": "multipart/form-data" }
       })
         .then(() => {
           fetchSeminars();
@@ -51,8 +64,8 @@ export default function KelolaSeminar() {
         });
     } else {
       // tambah
-      axios.post("http://localhost:5000/api/seminar", form, {
-        headers: { Authorization: `Bearer ${token}` }
+      axios.post("http://localhost:5000/api/seminar", formData, {
+        headers: { Authorization: `Bearer ${token}`, "Content-Type": "multipart/form-data" }
       })
         .then(() => {
           fetchSeminars();
@@ -102,7 +115,7 @@ export default function KelolaSeminar() {
               <input name="tanggal" value={form.tanggal} onChange={handleChange} placeholder="Tanggal" className="w-full px-3 py-2 rounded bg-gray-800" required />
               <input name="lokasi" value={form.lokasi} onChange={handleChange} placeholder="Lokasi" className="w-full px-3 py-2 rounded bg-gray-800" required />
               <input name="harga" value={form.harga} onChange={handleChange} placeholder="Harga" className="w-full px-3 py-2 rounded bg-gray-800" />
-              <input name="gambar" value={form.gambar} onChange={handleChange} placeholder="URL Gambar" className="w-full px-3 py-2 rounded bg-gray-800" />
+              <input name="gambar" type="file" accept="image/*" onChange={handleChange} className="w-full px-3 py-2 rounded bg-gray-800" />
               {/* <input name="created_by" value={form.created_by} onChange={handleChange} placeholder="User ID Admin" className="w-full px-3 py-2 rounded bg-gray-800" /> */}
               <div className="flex justify-end gap-3 pt-4">
                 <button type="button" onClick={() => setIsModalOpen(false)} className="px-4 py-2 rounded-lg bg-gray-600">Batal</button>

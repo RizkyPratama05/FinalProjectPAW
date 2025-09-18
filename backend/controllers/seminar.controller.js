@@ -9,8 +9,14 @@ const {
 
 // Endpoint untuk membuat seminar baru
 exports.create = async (req, res) => {
-    const { judul, deskripsi, tanggal, lokasi, harga, gambar } = req.body;
-    const created_by = req.user.id; 
+    const { judul, deskripsi, tanggal, lokasi, harga } = req.body;
+    const created_by = req.user.id;
+    let gambar = null;
+    if (req.file) {
+        gambar = `/uploads/${req.file.filename}`;
+    } else if (req.body.gambar) {
+        gambar = req.body.gambar;
+    }
     await createSeminar(judul, deskripsi, tanggal, lokasi, harga, gambar, created_by);
     res.status(201).json({ message: 'Seminar created successfully' });
 };
@@ -32,7 +38,13 @@ exports.detail = async (req, res) => {
 
 // Endpoint untuk update seminar
 exports.update = async (req, res) => {
-    const { judul, deskripsi, tanggal, lokasi, harga, gambar } = req.body;
+    const { judul, deskripsi, tanggal, lokasi, harga } = req.body;
+    let gambar = null;
+    if (req.file) {
+        gambar = `/uploads/${req.file.filename}`;
+    } else if (req.body.gambar) {
+        gambar = req.body.gambar;
+    }
     await updateSeminar(req.params.seminar_id, judul, deskripsi, tanggal, lokasi, harga, gambar);
     res.json({ message: 'Seminar updated successfully' });
 };
