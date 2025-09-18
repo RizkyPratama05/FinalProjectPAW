@@ -25,10 +25,12 @@ router.get("/:id", async (req, res) => {
 // CREATE user
 router.post("/", async (req, res) => {
   const { name, email, password } = req.body;
+  const bcrypt = require('bcrypt');
   try {
+    const hashedPassword = await bcrypt.hash(password, 10);
     const [result] = await db.query(
       "INSERT INTO users (nama, email, password) VALUES (?, ?, ?)",
-      [name, email, password]
+      [name, email, hashedPassword]
     );
     res.json({ id: result.insertId, nama: name, email });
   } catch (err) {

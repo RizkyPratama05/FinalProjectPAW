@@ -31,7 +31,7 @@ const KelolaUser = () => {
 				await axios.put(`${API_URL}/${form.user_id}`, { nama: form.nama, email: form.email });
 			} else {
 				// Tambah user
-				await axios.post(API_URL, { nama: form.nama, email: form.email, password: form.password });
+			await axios.post(API_URL, { name: form.nama, email: form.email, password: form.password });
 			}
 			setIsModalOpen(false);
 			setForm({ user_id: null, nama: "", email: "", password: "" });
