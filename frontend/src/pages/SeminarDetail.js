@@ -66,9 +66,8 @@ export default function SeminarDetail() {
         { seminar_id: seminar.seminar_id },
         { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
       );
-      alert(`Pendaftaran berhasil!\nNama: ${nama}\nSeminar: ${seminar.judul}`);
+      alert(`Pendaftaran berhasil!\nSeminar: ${seminar.judul}`);
       setShowModal(false);
-      setNama("");
       navigate("/certificate");
     } catch (err) {
       alert("Pendaftaran gagal: " + (err.response?.data?.message || "Server error"));
@@ -155,17 +154,7 @@ export default function SeminarDetail() {
           <div className="bg-white text-gray-900 rounded-2xl shadow-xl w-full max-w-md p-6">
             <h2 className="text-xl font-bold mb-4">Pendaftaran Tiket</h2>
             <form onSubmit={handleSubmit}>
-              <label className="block mb-3">
-                <span className="text-sm font-semibold">Nama Pendaftar</span>
-                <input
-                  type="text"
-                  value={nama}
-                  onChange={(e) => setNama(e.target.value)}
-                  required
-                  className="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
-                  placeholder="Masukkan nama Anda"
-                />
-              </label>
+              
               <div className="flex justify-end gap-3 mt-6">
                 <button
                   type="button"
