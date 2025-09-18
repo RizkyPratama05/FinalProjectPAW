@@ -1,3 +1,20 @@
+// Endpoint untuk mengambil pendaftaran seminar milik user yang sedang login (beserta sertifikat)
+exports.listMyRegistrations = async (req, res) => {
+  const user_id = req.user && req.user.id ? req.user.id : null;
+  if (!user_id) {
+    return res.status(401).json({ message: 'User tidak terotorisasi atau token tidak valid.' });
+  }
+  const [rows] = await db.query(
+    `SELECT r.*, u.nama, s.judul, s.gambar, c.file_url AS sertifikat_url
+     FROM registrations r
+     JOIN users u ON r.user_id = u.user_id
+     JOIN seminars s ON r.seminar_id = s.seminar_id
+     LEFT JOIN certificates c ON r.registration_id = c.registration_id
+     WHERE r.user_id = ?`,
+    [user_id]
+  );
+  res.json(rows);
+};
 // Import fungsi pendaftaran dan sertifikat dari model dan service
 const { updateRegistrationStatus } = require('../models/registration.models');
 const { createCertificate } = require('../models/certificate.models');
