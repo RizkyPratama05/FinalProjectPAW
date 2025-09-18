@@ -11,7 +11,6 @@ export default function Certificate() {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-start bg-gradient-to-b from-black via-gray-900 to-purple-950 text-white pt-32 px-6">
-      <h1 className="text-3xl font-bold mb-8">Halaman Sertifikat</h1>
 
       {registrations.length === 0 ? (
         <p>Belum ada pendaftar.</p>
