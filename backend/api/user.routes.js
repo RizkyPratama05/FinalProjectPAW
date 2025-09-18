@@ -1,6 +1,34 @@
-const express = require("express");
+
+const express = require('express');
 const router = express.Router();
-const db = require("../database/db"); // koneksi mysql
+const db = require('../database/db');
+const { protect } = require('../middlewares/auth.middleware');
+router.put('/password', protect, async (req, res) => {
+  const user_id = req.user && req.user.id ? req.user.id : null;
+  const { oldPassword, newPassword } = req.body;
+  const bcrypt = require('bcrypt');
+  if (!user_id) {
+    return res.status(401).json({ message: 'Tidak terotorisasi' });
+  }
+  try {
+    // Ambil password lama dari database
+    const [rows] = await db.query('SELECT password FROM users WHERE user_id = ?', [user_id]);
+    if (!rows[0]) {
+      return res.status(404).json({ message: 'User tidak ditemukan' });
+    }
+    const match = await bcrypt.compare(oldPassword, rows[0].password);
+    if (!match) {
+      return res.status(400).json({ message: 'Password lama salah' });
+    }
+    // Hash password baru
+    const hashedNew = await bcrypt.hash(newPassword, 10);
+    await db.query('UPDATE users SET password = ? WHERE user_id = ?', [hashedNew, user_id]);
+    res.json({ message: 'Password berhasil diupdate' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+// ...existing code...
 
 // GET semua user
 router.get("/", async (req, res) => {

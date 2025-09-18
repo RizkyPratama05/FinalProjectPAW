@@ -48,7 +48,7 @@ export default function Navbar() {
     try {
       // contoh fetch ke backend
       const token = localStorage.getItem("token");
-      const res = await fetch("http://localhost:5000/api/users/update-password", {
+      const res = await fetch("http://localhost:5000/api/user/password", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
