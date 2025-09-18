@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { FiLogOut } from "react-icons/fi";
+import { FiLogOut, FiKey } from "react-icons/fi";
 import { FaUserCircle } from "react-icons/fa";
 
 export default function Navbar() {
@@ -8,26 +8,65 @@ export default function Navbar() {
   const location = useLocation();
   const [user, setUser] = useState(null);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [showPasswordModal, setShowPasswordModal] = useState(false);
+  const [oldPassword, setOldPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
 
-  // Ambil data user dari localStorage ketika component mount
+  const dropdownRef = useRef();
+
+  // Ambil data user dari localStorage
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
       try {
-        setUser(JSON.parse(storedUser)); // pastikan data user disimpan dalam bentuk JSON saat login
+        setUser(JSON.parse(storedUser));
       } catch {
-        setUser(storedUser); // fallback kalau cuma string
+        setUser(storedUser);
       }
     }
+
+    // Tutup dropdown jika klik di luar
+    const handleClickOutside = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setDropdownOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Jangan tampilkan Navbar di landing page
   if (location.pathname === "/") return null;
 
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     navigate("/");
+  };
+
+  const handlePasswordUpdate = async (e) => {
+    e.preventDefault();
+    try {
+      // contoh fetch ke backend
+      const token = localStorage.getItem("token");
+      const res = await fetch("http://localhost:5000/api/users/update-password", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ oldPassword, newPassword }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || "Gagal update password");
+
+      alert("Password berhasil diperbarui!");
+      setShowPasswordModal(false);
+      setOldPassword("");
+      setNewPassword("");
+    } catch (err) {
+      alert(err.message);
+    }
   };
 
   return (
@@ -55,30 +94,95 @@ export default function Navbar() {
           </li>
         </ul>
 
-        {/* Bagian User */}
-        <div className="relative">
-          <button
-            onClick={() => setDropdownOpen(!dropdownOpen)}
-            className="flex items-center gap-2 p-2 rounded-full bg-purple-700 hover:bg-purple-800 transition-colors text-white shadow-md"
-          >
-            <FaUserCircle className="text-xl" />
-            <span className="hidden md:inline">{user?.name || "User"}</span>
-          </button>
+        {/* Dropdown User */}
+<div className="relative" ref={dropdownRef}>
+  <button
+    onClick={() => setDropdownOpen(!dropdownOpen)}
+    className="flex items-center gap-2 p-2 rounded-full bg-purple-700 hover:bg-purple-800 transition-colors text-white shadow-md"
+  >
+    <FaUserCircle className="text-xl" />
+    <span className="hidden md:inline">{user?.name || "User"}</span>
+  </button>
 
-          {/* Dropdown */}
-          {dropdownOpen && (
-            <div className="absolute right-0 mt-2 w-40 bg-white rounded-md shadow-lg py-2 text-sm text-gray-700">
-              <button
-                onClick={handleLogout}
-                className="flex items-center w-full px-4 py-2 hover:bg-gray-100"
-              >
-                <FiLogOut className="mr-2" />
-                Logout
-              </button>
-            </div>
-          )}
+  {dropdownOpen && (
+    <div className="absolute right-0 mt-2 w-48 bg-gray-800 rounded-lg shadow-lg py-2 text-sm text-gray-200 border border-gray-700">
+      <button
+        onClick={() => {
+          setShowPasswordModal(true);
+          setDropdownOpen(false);
+        }}
+        className="flex items-center w-full px-4 py-2 hover:bg-gray-700 transition-colors"
+      >
+        <FiKey className="mr-2" /> Update Password
+      </button>
+      <button
+        onClick={handleLogout}
+        className="flex items-center w-full px-4 py-2 hover:bg-gray-700 transition-colors"
+      >
+        <FiLogOut className="mr-2" />
+        Logout
+      </button>
+    </div>
+  )}
+</div>
+</div>
+
+      {/* Modal Update Password */}
+{showPasswordModal && (
+  <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 min-h-screen">
+    <div className="bg-gray-900 p-6 rounded-2xl shadow-2xl w-full max-w-md mx-4 text-white">
+      <h2 className="text-xl font-semibold mb-4">Update Password</h2>
+      <form onSubmit={handlePasswordUpdate} className="space-y-4">
+        <div>
+          <label className="block text-sm font-medium mb-1">
+            Password Lama
+          </label>
+          <input
+            type="password"
+            placeholder="Masukkan password lama"
+            value={oldPassword}
+            onChange={(e) => setOldPassword(e.target.value)}
+            required
+            className="w-full px-3 py-2 border border-gray-700 rounded-lg 
+                       bg-gray-800 text-white 
+                       focus:outline-none focus:ring-2 focus:ring-purple-500"
+          />
         </div>
-      </div>
-    </nav>
-  );
+        <div>
+          <label className="block text-sm font-medium mb-1">
+            Password Baru
+          </label>
+          <input
+            type="password"
+            placeholder="Masukkan password baru"
+            value={newPassword}
+            onChange={(e) => setNewPassword(e.target.value)}
+            required
+            className="w-full px-3 py-2 border border-gray-700 rounded-lg 
+                       bg-gray-800 text-white 
+                       focus:outline-none focus:ring-2 focus:ring-purple-500"
+          />
+        </div>
+        <div className="flex justify-end gap-3 pt-2">
+          <button
+            type="button"
+            onClick={() => setShowPasswordModal(false)}
+            className="px-4 py-2 rounded-lg bg-gray-700 text-gray-200 hover:bg-gray-600"
+          >
+            Batal
+          </button>
+          <button
+            type="submit"
+            className="px-4 py-2 rounded-lg bg-purple-600 text-white hover:bg-purple-700"
+          >
+            Update
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+)}
+
+</nav>
+);
 }
