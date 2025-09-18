@@ -8,24 +8,6 @@ const KelolaUser = () => {
 	const [form, setForm] = useState({ user_id: null, nama: "", email: "", password: "" });
 	const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // Ambil data user
-  const fetchUsers = async () => {
-    try {
-       axios.get("http://localhost:5000/api/user", {
-        headers: { Authorization: `Bearer ${token}` }
-      })
-      .then(res => setUsers(res.data))
-      .catch(err => console.error(err));
-  };
-
-    try {
-      const res = await axios.get(API_URL);
-      setUsers(res.data);
-    } catch (err) {
-      console.error("Fetch users error:", err);
-    }
-  };
-
 	// Ambil data user
 	const fetchUsers = async () => {
 		try {
