@@ -8,7 +8,7 @@ export default function Beranda() {
   useEffect(() => {
     // Ambil data seminar dari backend
     axios
-      .get("http://localhost:5000/api/seminar")
+      .get("http://localhost:5001/api/seminar")
       .then((res) => setSeminars(res.data))
       .catch((err) => console.error("Error fetching seminars:", err));
   }, []);
