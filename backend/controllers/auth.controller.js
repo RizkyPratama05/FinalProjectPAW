@@ -19,6 +19,17 @@ exports.register = async (req, res) => {
     res.status(201).json({message: 'User berhasil didaftarkan'});
 };
 
+exports.registerAdmin = async (req, res) => {
+  const {nama, email, password} = req.body;
+  const userExists = await findUserByEmail(email);
+  if (userExists) {
+    return res.status(400).json({message: 'Email sudah terdaftar'});
+  }
+
+  await createUser(nama, email, password, "admin");
+  res.status(201).json({message: 'Admin berhasil dibuat'});
+};
+
 // Endpoint untuk login user
 exports.login = async (req, res) => {
     const {email, password} = req.body;
