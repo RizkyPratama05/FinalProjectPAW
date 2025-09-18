@@ -10,6 +10,8 @@ const { isAdmin } = require('../middlewares/role.middleware');
 router.post('/seminar', protect, registrationController.registerSeminar);
 // Endpoint untuk list semua pendaftaran seminar (admin)
 router.get('/all', protect, isAdmin, registrationController.listRegistrations);
+// Endpoint untuk mengambil pendaftaran seminar milik user yang sedang login
+router.get('/mine', protect, registrationController.listMyRegistrations);
 // Endpoint untuk validasi pendaftaran seminar (admin)
 router.put('/:registration_id/validate', protect, isAdmin, registrationController.validateRegistration);
 module.exports = router;

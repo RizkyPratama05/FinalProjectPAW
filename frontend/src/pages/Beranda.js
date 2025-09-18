@@ -8,7 +8,7 @@ export default function Beranda() {
   useEffect(() => {
     // Ambil data seminar dari backend
     axios
-      .get("http://localhost:5000/api/seminars")
+      .get("http://localhost:5000/api/seminar")
       .then((res) => setSeminars(res.data))
       .catch((err) => console.error("Error fetching seminars:", err));
   }, []);
@@ -24,14 +24,14 @@ export default function Beranda() {
         ) : (
           seminars.map((item) => (
             <SeminarCard
-              key={item.id}
-              id={item.id}   // wajib
-              title={item.title}
-              desc={item.desc}
-              date={item.date}
-              location={item.location}
-              price={item.price}
-              image={item.image}
+              key={item.seminar_id}
+              id={item.seminar_id}
+              title={item.judul}
+              desc={item.deskripsi}
+              date={item.tanggal}
+              location={item.lokasi}
+              price={item.harga}
+              image={item.gambar}
             />
           ))
         )}

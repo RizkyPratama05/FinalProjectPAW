@@ -1,79 +1,80 @@
-import React, { useState } from "react";
+import Navbar from "../component/Navbar";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-const Attendance = () => {
-  const [registrationId, setRegistrationId] = useState("");
-  const [status, setStatus] = useState("present");
-  const [attendanceData, setAttendanceData] = useState(null);
-  const [message, setMessage] = useState("");
+export default function AttendanceAdmin() {
+	const [attendances, setAttendances] = useState([]);
+	const [loading, setLoading] = useState(true);
 
-  const handleMarkAttendance = async () => {
-    try {
-      await axios.post("http://localhost:5000/attendance", {
-        registration_id: registrationId,
-        status,
-      });
-      setMessage("Absensi berhasil dicatat!");
-      fetchAttendance(); // otomatis ambil data terbaru
-    } catch (error) {
-      console.error(error);
-      setMessage("Gagal mencatat absensi.");
-    }
-  };
+	useEffect(() => {
+		// Ambil data pendaftaran dan kehadiran peserta dari backend
+			axios.get("http://localhost:5000/api/attendance/all", {
+				headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+			})
+				.then(res => {
+					setAttendances(Array.isArray(res.data) ? res.data : []);
+					setLoading(false);
+				})
+				.catch(() => {
+					setAttendances([]);
+					setLoading(false);
+				});
+	}, []);
 
-  const fetchAttendance = async () => {
-    try {
-      const res = await axios.get(
-        `http://localhost:5000/attendance/${registrationId}`
-      );
-      setAttendanceData(res.data);
-    } catch (error) {
-      console.error(error);
-      setMessage("Gagal mengambil data absensi.");
-    }
-  };
+	const handleStatusChange = (registration_id, status) => {
+		axios.post(`http://localhost:5000/api/attendance/${registration_id}`, { status }, {
+			headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+		})
+			.then(() => {
+				setAttendances(attendances.map(a => a.registration_id === registration_id ? { ...a, status } : a));
+			});
+	};
 
-  return (
-    <div style={{ padding: "20px", maxWidth: "400px", margin: "auto" }}>
-      <h2>Absensi Seminar</h2>
+		return (
+			<>
+				<div className="min-h-screen w-full bg-gradient-to-b from-black via-gray-900 to-purple-950 text-white pt-24 px-6 md:px-20">
+					<h1 className="text-2xl font-bold mb-6">Validasi Kehadiran Peserta Seminar</h1>
+					{loading ? (
+						<p>Loading...</p>
+					) : (
+						<div className="overflow-x-auto">
+							<table className="w-full border border-gray-700 rounded-lg overflow-hidden">
+								<thead className="bg-white/10 text-left">
+									<tr>
+										<th className="px-4 py-2">Nama Peserta</th>
+										<th className="px-4 py-2">Seminar</th>
+										<th className="px-4 py-2">Status Kehadiran</th>
+										<th className="px-4 py-2">Aksi</th>
+									</tr>
+								</thead>
+								<tbody>
+									{attendances.map(a => (
+										<tr key={a.registration_id} className="border-t border-gray-700 hover:bg-white/5">
+											<td className="px-4 py-2">{a.nama}</td>
+											<td className="px-4 py-2">{a.judul}</td>
+											<td className="px-4 py-2 font-semibold">
+												{a.status === "hadir" ? <span className="text-green-400">Hadir</span> : <span className="text-red-400">Tidak Hadir</span>}
+											</td>
+											<td className="px-4 py-2 space-x-2">
+												<button
+													onClick={() => handleStatusChange(a.registration_id, "hadir")}
+													className="px-3 py-1 rounded bg-green-600 hover:bg-green-700"
+													disabled={a.status === "hadir"}
+												>Hadir</button>
+												<button
+													onClick={() => handleStatusChange(a.registration_id, "tidak hadir")}
+													className="px-3 py-1 rounded bg-red-600 hover:bg-red-700"
+													disabled={a.status === "tidak hadir"}
+												>Tidak Hadir</button>
+											</td>
+										</tr>
+									))}
+								</tbody>
+							</table>
+						</div>
+					)}
+				</div>
+			</>
+		);
+	}
 
-      <div style={{ marginBottom: "10px" }}>
-        <label>Registration ID:</label>
-        <input
-          type="text"
-          value={registrationId}
-          onChange={(e) => setRegistrationId(e.target.value)}
-          style={{ width: "100%", padding: "5px" }}
-        />
-      </div>
-
-      <div style={{ marginBottom: "10px" }}>
-        <label>Status:</label>
-        <select
-          value={status}
-          onChange={(e) => setStatus(e.target.value)}
-          style={{ width: "100%", padding: "5px" }}
-        >
-          <option value="present">Hadir</option>
-          <option value="absent">Tidak Hadir</option>
-        </select>
-      </div>
-
-      <button onClick={handleMarkAttendance} style={{ padding: "10px", width: "100%" }}>
-        Catat Absensi
-      </button>
-
-      {message && <p>{message}</p>}
-
-      {attendanceData && (
-        <div style={{ marginTop: "20px" }}>
-          <h3>Data Absensi</h3>
-          <p>Registration ID: {attendanceData.registration_id}</p>
-          <p>Status: {attendanceData.status}</p>
-        </div>
-      )}
-    </div>
-  );
-};
-
-export default Attendance;

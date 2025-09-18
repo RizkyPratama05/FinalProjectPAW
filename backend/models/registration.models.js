@@ -1,10 +1,10 @@
 const db = require('../database/db');
 
 // Membuat pendaftaran seminar baru
-const createRegistration = async (userId, seminarId, data_tambahan)=> {
+const createRegistration = async (userId, seminarId)=> {
     await db.query(
-        'INSERT INTO registrations (user_id, seminar_id, data_tambahan) VALUES (?, ?, ?)',
-        [userId, seminarId, data_tambahan]
+        'INSERT INTO registrations (user_id, seminar_id) VALUES (?, ?)',
+        [userId, seminarId]
     );
 };
 

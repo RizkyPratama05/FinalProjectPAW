@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import {
   HiCalendar,
@@ -14,25 +15,31 @@ export default function SeminarDetail() {
   const [nama, setNama] = useState("");
   const navigate = useNavigate();
 
-  // Contoh data (nantinya ambil dari API)
-  const seminars = [
-    {
-      id: 1,
-      title: "Seminar Teknologi 2025",
-      desc: "Bahas perkembangan AI & IoT bersama pembicara internasional.",
-      date: "20 September 2025",
-      time: "09:00 WIB",
-      location: "UMY Convention Hall, Yogyakarta",
-      price: "Rp 100.000",
-      image:
-        "https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp",
-      social: {
-        instagram: "https://instagram.com/umy_official",
-      },
-    },
-  ];
+  // const seminars = [
+  //   {
+  //     id: 1,
+  //     title: "Seminar Teknologi 2025",
+  //     desc: "Bahas perkembangan AI & IoT bersama pembicara internasional.",
+  //     date: "20 September 2025",
+  //     time: "09:00 WIB",
+  //     location: "UMY Convention Hall, Yogyakarta",
+  //     price: "Rp 100.000",
+  //     image:
+  //       "https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp",
+  //     social: {
+  //       instagram: "https://instagram.com/umy_official",
+  //     },
+  //   },
+  // ];
+  // const seminar = seminars.find((s) => s.id === parseInt(id));
 
-  const seminar = seminars.find((s) => s.id === parseInt(id));
+  const [seminar, setSeminar] = useState(null);
+  useEffect(() => {
+    fetch(`http://localhost:5000/api/seminar/${id}`)
+      .then(res => res.json())
+      .then(data => setSeminar(data))
+      .catch(() => setSeminar(null));
+  }, [id]);
 
   if (!seminar) {
     return (
@@ -50,21 +57,22 @@ export default function SeminarDetail() {
     );
   }
 
-  // Fungsi submit untuk menyimpan nama di localStorage
-  const handleSubmit = (e) => {
+  // Fungsi submit untuk mendaftar seminar ke backend
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // Ambil data lama dari localStorage
-    const registrations = JSON.parse(localStorage.getItem("registrations")) || [];
-    registrations.push({ nama, seminar: seminar.title });
-    localStorage.setItem("registrations", JSON.stringify(registrations));
-
-    alert(`Pendaftaran berhasil!\nNama: ${nama}\nSeminar: ${seminar.title}`);
-    setShowModal(false);
-    setNama("");
-
-    // Navigasi ke halaman sertifikat
-    navigate("/certificate");
+    try {
+      await axios.post(
+        "http://localhost:5000/api/registration/seminar",
+        { seminar_id: seminar.seminar_id },
+        { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
+      );
+      alert(`Pendaftaran berhasil!\nNama: ${nama}\nSeminar: ${seminar.judul}`);
+      setShowModal(false);
+      setNama("");
+      navigate("/certificate");
+    } catch (err) {
+      alert("Pendaftaran gagal: " + (err.response?.data?.message || "Server error"));
+    }
   };
 
   return (
@@ -74,8 +82,8 @@ export default function SeminarDetail() {
         {/* Poster */}
         <div className="lg:col-span-2">
           <img
-            src={seminar.image}
-            alt={seminar.title}
+            src={seminar.gambar ? (seminar.gambar.startsWith('http') ? seminar.gambar : `http://localhost:5000${seminar.gambar}`) : ''}
+            alt={seminar.judul}
             className="w-full h-80 md:h-[450px] object-cover rounded-2xl shadow-xl"
           />
         </div>
@@ -83,30 +91,24 @@ export default function SeminarDetail() {
         {/* Info Event */}
         <div className="rounded-2xl bg-white/10 backdrop-blur-md shadow-lg p-6 flex flex-col justify-between">
           <div>
-            <h1 className="text-2xl font-bold mb-4">{seminar.title}</h1>
+            <h1 className="text-2xl font-bold mb-4">{seminar.judul}</h1>
             <ul className="space-y-3">
               <li className="flex items-center gap-2">
                 <HiCalendar className="text-blue-400 text-xl" />
                 <span>
-                  <strong>Tanggal:</strong> {seminar.date}
-                </span>
-              </li>
-              <li className="flex items-center gap-2">
-                <HiClock className="text-blue-400 text-xl" />
-                <span>
-                  <strong>Waktu:</strong> {seminar.time}
+                  <strong>Tanggal:</strong> {seminar.tanggal}
                 </span>
               </li>
               <li className="flex items-center gap-2">
                 <HiLocationMarker className="text-blue-400 text-xl" />
                 <span>
-                  <strong>Lokasi:</strong> {seminar.location}
+                  <strong>Lokasi:</strong> {seminar.lokasi}
                 </span>
               </li>
               <li className="flex items-center gap-2">
                 <HiCurrencyDollar className="text-blue-400 text-xl" />
                 <span>
-                  <strong>Harga:</strong> {seminar.price}
+                  <strong>Harga:</strong> {seminar.harga}
                 </span>
               </li>
             </ul>
@@ -125,22 +127,26 @@ export default function SeminarDetail() {
           {/* Media Sosial */}
           <div className="mt-6">
             <p className="font-semibold mb-2">Media Sosial</p>
-            <a
-              href={seminar.social.instagram}
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-pink-500 text-pink-400 hover:bg-pink-500 hover:text-white transition"
-            >
-              <FaInstagram /> Instagram
-            </a>
+            {seminar.social && seminar.social.instagram ? (
+              <a
+                href={seminar.social.instagram}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-pink-500 text-pink-400 hover:bg-pink-500 hover:text-white transition"
+              >
+                <FaInstagram /> Instagram
+              </a>
+            ) : (
+              <span className="text-gray-400">Instagram tidak tersedia</span>
+            )}
           </div>
         </div>
       </div>
 
       {/* Deskripsi */}
       <div className="mt-10 rounded-2xl bg-white/10 backdrop-blur-md shadow-lg p-6">
-        <h2 className="text-xl font-bold mb-4">Deskripsi</h2>
-        <p className="leading-relaxed">{seminar.desc}</p>
+  <h2 className="text-xl font-bold mb-4">Deskripsi</h2>
+  <p className="leading-relaxed">{seminar.deskripsi}</p>
       </div>
 
       {/* Modal */}

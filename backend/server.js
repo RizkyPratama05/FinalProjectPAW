@@ -11,6 +11,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use('/certificates', express.static(path.join(__dirname, 'public/certificates')));
+// Agar file gambar seminar bisa diakses dari frontend
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.use('/api/auth', require('./api/auth.routes'));
 app.use('/api/user', require('./api/user.routes'));

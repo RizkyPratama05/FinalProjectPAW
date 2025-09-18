@@ -1,3 +1,18 @@
+// Endpoint untuk list semua pendaftar seminar beserta status kehadiran (admin)
+exports.listAllAttendance = async (req, res) => {
+  const db = require('../database/db');
+  // Gabungkan registrations dan attendance
+  const [rows] = await db.query(`
+    SELECT r.registration_id, u.nama, s.judul,
+      COALESCE(a.status, 'belum absen') AS status
+    FROM registrations r
+    JOIN users u ON r.user_id = u.user_id
+    JOIN seminars s ON r.seminar_id = s.seminar_id
+    LEFT JOIN attendance a ON r.registration_id = a.registration_id
+    WHERE r.status = 'approved' OR r.status = 'pending'`
+  );
+  res.json(rows);
+};
 // Import fungsi absensi dari model
 const { markAttendance, getAttendanceByRegistration } = require('../models/attendance.models.js');
 
