@@ -100,8 +100,8 @@ export default function Navbar() {
     onClick={() => setDropdownOpen(!dropdownOpen)}
     className="flex items-center gap-2 p-2 rounded-full bg-purple-700 hover:bg-purple-800 transition-colors text-white shadow-md"
   >
-    <FaUserCircle className="text-xl" />
-    <span className="hidden md:inline">{user?.name || "User"}</span>
+  <FaUserCircle className="text-xl" />
+  <span className="hidden md:inline">{user?.nama || user?.name || "User"}</span>
   </button>
 
   {dropdownOpen && (

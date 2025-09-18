@@ -8,6 +8,18 @@ export default function NavbarAdmin() {
   const location = useLocation();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef();
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      try {
+        setUser(JSON.parse(storedUser));
+      } catch {
+        setUser(storedUser);
+      }
+    }
+  }, []);
 
   // Tutup dropdown jika klik di luar
   useEffect(() => {
@@ -68,7 +80,7 @@ export default function NavbarAdmin() {
             className="flex items-center gap-2 p-2 rounded-full bg-purple-700 hover:bg-purple-800 transition-colors text-white shadow-md"
           >
             <FaUserCircle className="text-xl" />
-            <span className="hidden md:inline">Admin</span>
+            <span className="hidden md:inline">{user?.nama || user?.name || "Admin"}</span>
           </button>
 
           {dropdownOpen && (
