@@ -1,0 +1,8 @@
+{
+  "name": "kelompok-6",
+  "version": "1.0.0",
+  "description": "Library utilitas untuk project FinalProjectPAW",
+  "main": "index.js",
+  "author": "Kelompok 6",
+  "license": "MIT"
+}
