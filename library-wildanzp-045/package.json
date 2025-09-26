@@ -1,0 +1,8 @@
+{
+  "name": "library-wildanzp-045",
+  "version": "1.0.1",
+  "description": "Kumpulan utilitas bermanfaat untuk project PAW",
+  "main": "index.js",
+  "author": "wildanzp",
+  "license": "MIT"
+}
