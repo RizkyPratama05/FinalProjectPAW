@@ -5,7 +5,7 @@ export default function CertificatePage() {
   const [registrations, setRegistrations] = useState([]);
 
   useEffect(() => {
-    axios.get("http://localhost:5000/api/registration/mine", {
+    axios.get("http://localhost:5001/api/registration/mine", {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
     })
       .then(res => setRegistrations(Array.isArray(res.data) ? res.data : []))
@@ -26,7 +26,7 @@ export default function CertificatePage() {
               {/* Foto seminar */}
               {r.gambar && (
                 <img
-                  src={r.gambar.startsWith('http') ? r.gambar : `http://localhost:5000${r.gambar}`}
+                  src={r.gambar.startsWith('http') ? r.gambar : `http://localhost:5001${r.gambar}`}
                   alt={r.judul}
                   className="w-full h-40 object-cover rounded-xl mb-4"
                 />
@@ -42,7 +42,7 @@ export default function CertificatePage() {
               {/* Tombol unduh sertifikat jika lulus dan sertifikat tersedia */}
               {r.status === 'approved' && r.sertifikat_url && (
                 <a
-                  href={`http://localhost:5000${r.sertifikat_url}`}
+                  href={`http://localhost:5001${r.sertifikat_url}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="px-4 py-2 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700 mb-2"
