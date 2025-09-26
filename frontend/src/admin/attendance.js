@@ -8,7 +8,7 @@ export default function AttendanceAdmin() {
 
 	useEffect(() => {
 		// Ambil data pendaftaran dan kehadiran peserta dari backend
-			axios.get("http://localhost:5000/api/attendance/all", {
+			axios.get("http://localhost:5001/api/attendance/all", {
 				headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
 			})
 				.then(res => {
@@ -22,7 +22,7 @@ export default function AttendanceAdmin() {
 	}, []);
 
 	const handleStatusChange = (registration_id, status) => {
-		axios.post(`http://localhost:5000/api/attendance/${registration_id}`, { status }, {
+		axios.post(`http://localhost:5001/api/attendance/${registration_id}`, { status }, {
 			headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
 		})
 			.then(() => {
