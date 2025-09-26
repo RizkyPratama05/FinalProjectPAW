@@ -1,0 +1,8 @@
+{
+  "name": "library-rizkypp-005",
+  "version": "1.0.0",
+  "description": "Library utilitas unik untuk project PAW oleh RizkyPP",
+  "main": "index.js",
+  "author": "RizkyPP",
+  "license": "MIT"
+}
