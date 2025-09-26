@@ -35,7 +35,7 @@ export default function SeminarDetail() {
 
   const [seminar, setSeminar] = useState(null);
   useEffect(() => {
-    fetch(`http://localhost:5000/api/seminar/${id}`)
+    fetch(`http://localhost:5001/api/seminar/${id}`)
       .then(res => res.json())
       .then(data => setSeminar(data))
       .catch(() => setSeminar(null));
@@ -62,7 +62,7 @@ export default function SeminarDetail() {
     e.preventDefault();
     try {
       await axios.post(
-        "http://localhost:5000/api/registration/seminar",
+        "http://localhost:5001/api/registration/seminar",
         { seminar_id: seminar.seminar_id },
         { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
       );
@@ -81,7 +81,7 @@ export default function SeminarDetail() {
         {/* Poster */}
         <div className="lg:col-span-2">
           <img
-            src={seminar.gambar ? (seminar.gambar.startsWith('http') ? seminar.gambar : `http://localhost:5000${seminar.gambar}`) : ''}
+            src={seminar.gambar ? (seminar.gambar.startsWith('http') ? seminar.gambar : `http://localhost:5001${seminar.gambar}`) : ''}
             alt={seminar.judul}
             className="w-full h-80 md:h-[450px] object-cover rounded-2xl shadow-xl"
           />
