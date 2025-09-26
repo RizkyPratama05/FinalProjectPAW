@@ -24,6 +24,8 @@ const generateCertificatePDF = async (registration_id, user_name, seminar_title)
   doc.fontSize(18).text(`Diberikan kepada: ${user_name}`, { align: 'center' });
   doc.moveDown();
   doc.fontSize(16).text(`Atas partisipasi dalam seminar: ${seminar_title}`, { align: 'center' });
+  doc.moveDown();
+  doc.fontSize(12).text(`Tanggal: ${new Date().toLocaleDateString()}`, { align: 'center' });
   doc.end();
 
   // Mengembalikan path file sertifikat untuk akses dari frontend
