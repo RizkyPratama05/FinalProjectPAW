@@ -21,7 +21,7 @@ export default function KelolaSeminar() {
 
   // Ambil data seminar dari backend
   const fetchSeminars = () => {
-    axios.get("http://localhost:5000/api/seminar", {
+    axios.get("http://localhost:5001/api/seminar", {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => setSeminars(res.data))
@@ -54,7 +54,7 @@ export default function KelolaSeminar() {
 
     if (form.seminar_id) {
       // update
-      axios.put(`http://localhost:5000/api/seminar/${form.seminar_id}`, formData, {
+      axios.put(`http://localhost:5001/api/seminar/${form.seminar_id}`, formData, {
         headers: { Authorization: `Bearer ${token}`, "Content-Type": "multipart/form-data" }
       })
         .then(() => {
@@ -64,7 +64,7 @@ export default function KelolaSeminar() {
         });
     } else {
       // tambah
-      axios.post("http://localhost:5000/api/seminar", formData, {
+      axios.post("http://localhost:5001/api/seminar", formData, {
         headers: { Authorization: `Bearer ${token}`, "Content-Type": "multipart/form-data" }
       })
         .then(() => {
@@ -90,7 +90,7 @@ export default function KelolaSeminar() {
   };
 
   const handleDelete = (seminar_id) => {
-    axios.delete(`http://localhost:5000/api/seminar/${seminar_id}`, {
+    axios.delete(`http://localhost:5001/api/seminar/${seminar_id}`, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(() => fetchSeminars());
@@ -147,7 +147,7 @@ export default function KelolaSeminar() {
                 <td className="px-4 py-2">{s.tanggal}</td>
                 <td className="px-4 py-2">{s.lokasi}</td>
                 <td className="px-4 py-2">{s.harga}</td>
-                <td className="px-4 py-2">{s.gambar ? <img src={s.gambar.startsWith('http') ? s.gambar : `http://localhost:5000${s.gambar}`} alt="Gambar Seminar" className="h-12 w-12 object-cover rounded" /> : '-'}</td>
+                <td className="px-4 py-2">{s.gambar ? <img src={s.gambar.startsWith('http') ? s.gambar : `http://localhost:5001${s.gambar}`} alt="Gambar Seminar" className="h-12 w-12 object-cover rounded" /> : '-'}</td>
                 <td className="px-4 py-2 space-x-2">
                   <button onClick={() => handleEdit(s)} className="px-3 py-1 rounded bg-yellow-500">Edit</button>
                   <button onClick={() => handleDelete(s.seminar_id)} className="px-3 py-1 rounded bg-red-500">Hapus</button>
