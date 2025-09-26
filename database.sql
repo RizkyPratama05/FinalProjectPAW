@@ -29,11 +29,11 @@ CREATE TABLE users (
 CREATE TABLE seminars (
 
   seminar_id INT AUTO_INCREMENT PRIMARY KEY,
-  judul VARCHAR(255) NOT NULL, -- diubah panjang datanya
+  judul VARCHAR(50) NOT NULL, -- diubah panjang datanya
   deskripsi TEXT,
   tanggal DATE NOT NULL,
   lokasi VARCHAR(255) NOT NULL,
-  harga VARCHAR(50), -- diubah ke int
+  harga INT, -- diubah ke int
   gambar VARCHAR(255),
   created_by INT,
   FOREIGN KEY (created_by) REFERENCES users(user_id) ON DELETE SET NULL

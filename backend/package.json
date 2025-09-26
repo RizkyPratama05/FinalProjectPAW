@@ -6,6 +6,8 @@
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
     "kelompok-6": "^1.0.0",
+    "library-nabilnasruddin-002": "^1.0.0",
+    "library-wildanzp-045": "^1.0.1",
     "multer": "^2.0.2",
     "mysql2": "^3.14.5",
     "nodemon": "^3.1.10",
