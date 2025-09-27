@@ -1,0 +1,11 @@
+{
+  "name": "library-saschadanu-043",
+  "version": "1.0.1",
+  "description": "library projek akhir PAW",
+  "main": "index.js",
+  "author": "saschadanu",
+  "license": "MIT",
+  "dependencies": {
+    "library-saschadanu-043": "^1.0.1"
+  }
+}
